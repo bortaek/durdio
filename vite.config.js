@@ -11,13 +11,12 @@ export default defineConfig({
     cssCodeSplit: true,
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Keep pdfjs-dist in its own chunk — loaded only when needed
-          'pdf-worker': ['pdfjs-dist'],
-          // Vendor chunk for React ecosystem
-          'vendor-react': ['react', 'react-dom'],
-          // Framer Motion is big — isolate it
-          'vendor-motion': ['framer-motion'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('pdfjs-dist')) return 'pdf-worker';
+            if (id.includes('react/') || id.includes('react-dom/') || id.includes('react@') || id.includes('react-dom@')) return 'vendor-react';
+            if (id.includes('framer-motion')) return 'vendor-motion';
+          }
         },
       },
     },

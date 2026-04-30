@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, MapPin, Phone } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
@@ -6,6 +6,18 @@ import { useLanguage } from '../context/LanguageContext';
 const Contact = () => {
   const { getSection } = useLanguage();
   const c = getSection('contact');
+  const nameRef = useRef(null);
+  const emailRef = useRef(null);
+  const messageRef = useRef(null);
+
+  const handleSendMessage = () => {
+    const name = nameRef.current?.value || '';
+    const email = emailRef.current?.value || '';
+    const message = messageRef.current?.value || '';
+    const subject = encodeURIComponent(`Portfolyo İletişim - ${name}`);
+    const body = encodeURIComponent(`Gönderen: ${name}\nE-posta: ${email}\n\n${message}`);
+    window.open(`mailto:edogukanergin@gmail.com?subject=${subject}&body=${body}`, '_self');
+  };
 
   return (
     <section id="contact" className="py-24 px-6 relative z-10">
@@ -75,6 +87,7 @@ const Contact = () => {
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-zinc-400 mb-1">{c.formName}</label>
               <input 
+                ref={nameRef}
                 type="text" 
                 id="name" 
                 className="w-full bg-zinc-900/50 border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 focus:outline-none focus:border-indigo-500 transition-colors"
@@ -84,6 +97,7 @@ const Contact = () => {
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-zinc-400 mb-1">{c.formEmail}</label>
               <input 
+                ref={emailRef}
                 type="email" 
                 id="email" 
                 className="w-full bg-zinc-900/50 border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 focus:outline-none focus:border-indigo-500 transition-colors"
@@ -93,6 +107,7 @@ const Contact = () => {
             <div>
               <label htmlFor="message" className="block text-sm font-medium text-zinc-400 mb-1">{c.formMessage}</label>
               <textarea 
+                ref={messageRef}
                 id="message" 
                 rows="4"
                 className="w-full bg-zinc-900/50 border border-zinc-800 rounded-lg px-4 py-3 text-zinc-100 focus:outline-none focus:border-indigo-500 transition-colors resize-none"
@@ -101,6 +116,7 @@ const Contact = () => {
             </div>
             <button 
               type="button"
+              onClick={handleSendMessage}
               className="w-full py-4 bg-zinc-100 text-zinc-950 rounded-lg font-bold hover:bg-zinc-200 transition-colors mt-2"
             >
               {c.sendMessage}

@@ -48,9 +48,9 @@ const certificatesData = [
   },
   {
     image: null,
-    pdf: '/certificates/SQL\'in Temelleri Eğitimi - Emre Doğukan Ergin.pdf',
+    pdf: "/certificates/SQL'in Temelleri Eğitimi - Emre Doğukan Ergin.pdf",
     titleEn: 'SQL Fundamentals Training',
-    titleTr: 'SQL\'in Temelleri Eğitimi'
+    titleTr: "SQL'in Temelleri Eğitimi"
   },
   {
     image: null,
@@ -178,7 +178,7 @@ const Certifications = () => {
 
   const handleCertClick = (cert) => {
     if (cert.pdf) {
-      window.open(cert.pdf, '_blank');
+      window.open(encodeURI(cert.pdf), '_blank', 'noopener,noreferrer');
     } else if (cert.image) {
       setSelectedCert(cert);
     }

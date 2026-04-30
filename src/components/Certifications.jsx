@@ -1,14 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, FileText, Image } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-import * as pdfjsLib from 'pdfjs-dist';
-
-// PDF.js worker setup
-pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.mjs',
-  import.meta.url
-).toString();
 
 const certificatesData = [
   {
@@ -85,16 +78,46 @@ const certificatesData = [
   },
 ];
 
-// PDF thumbnail component - renders first page of PDF as canvas
+// Lazy PDF thumbnail — loads pdfjs-dist only when visible via IntersectionObserver
 const PdfThumbnail = ({ pdfUrl, alt }) => {
   const canvasRef = useRef(null);
+  const containerRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
+  // Intersection Observer — only trigger render when in viewport
   useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '200px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Lazy-load pdfjs-dist and render only when visible
+  useEffect(() => {
+    if (!isVisible) return;
+
     let cancelled = false;
     const renderPdf = async () => {
       try {
+        // Dynamic import — pdfjs-dist is NOT bundled in the main chunk
+        const pdfjsLib = await import('pdfjs-dist');
+        pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+          'pdfjs-dist/build/pdf.worker.mjs',
+          import.meta.url
+        ).toString();
+
         const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
         const page = await pdf.getPage(1);
         const canvas = canvasRef.current;
@@ -118,11 +141,11 @@ const PdfThumbnail = ({ pdfUrl, alt }) => {
     };
     renderPdf();
     return () => { cancelled = true; };
-  }, [pdfUrl]);
+  }, [pdfUrl, isVisible]);
 
   if (error) {
     return (
-      <div className="flex flex-col items-center gap-3 text-zinc-500">
+      <div ref={containerRef} className="flex flex-col items-center gap-3 text-zinc-500">
         <FileText size={48} className="text-indigo-400/50" />
         <span className="text-xs font-medium uppercase tracking-wider">PDF</span>
       </div>
@@ -130,7 +153,7 @@ const PdfThumbnail = ({ pdfUrl, alt }) => {
   }
 
   return (
-    <>
+    <div ref={containerRef} className="flex items-center justify-center w-full h-full">
       <canvas
         ref={canvasRef}
         className={`max-w-full max-h-full object-contain transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
@@ -142,7 +165,7 @@ const PdfThumbnail = ({ pdfUrl, alt }) => {
           <span className="text-xs font-medium">Yükleniyor...</span>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
@@ -191,6 +214,8 @@ const Certifications = () => {
                   <img 
                     src={cert.image} 
                     alt={getTitle(cert)}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 ) : cert.pdf ? (

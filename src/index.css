@@ -42,6 +42,31 @@ html {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-zinc-200 to-zinc-500;
 }
 
+/* Background Effect Animations — pure CSS, GPU-accelerated */
+@keyframes bg-pulse-1 {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50%      { transform: scale(1.2); opacity: 0.5; }
+}
+@keyframes bg-pulse-2 {
+  0%, 100% { transform: scale(1); opacity: 0.2; }
+  50%      { transform: scale(1.5); opacity: 0.4; }
+}
+
+.bg-effect-pulse-1 {
+  will-change: transform, opacity;
+  animation: bg-pulse-1 10s ease-in-out infinite;
+}
+.bg-effect-pulse-2 {
+  will-change: transform, opacity;
+  animation: bg-pulse-2 15s ease-in-out infinite;
+}
+
+/* Off-screen section rendering optimisation */
+section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}
+
 /* Loader Animations */
 @keyframes loader-rotate {
   0% {

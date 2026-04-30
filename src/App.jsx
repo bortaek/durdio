@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense } from 'react';
+import React, { useState, useCallback, lazy, Suspense } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -14,10 +14,11 @@ const Contact = lazy(() => import('./components/Contact'));
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const handleLoadComplete = useCallback(() => setLoading(false), []);
 
   return (
     <LanguageProvider>
-      {loading && <Loader onComplete={() => setLoading(false)} />}
+      {loading && <Loader onComplete={handleLoadComplete} />}
       <div className={`relative min-h-screen text-zinc-50 font-sans selection:bg-indigo-500/30 ${loading ? 'hidden' : ''}`}>
         <BackgroundEffect />
         <Navbar />

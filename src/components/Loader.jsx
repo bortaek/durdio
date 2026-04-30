@@ -1,14 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const AiLoader = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
+  const onCompleteRef = useRef(onComplete);
+
+  // Keep the ref up-to-date without triggering effect re-runs
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress(prev => {
         if (prev >= 100) {
           clearInterval(interval);
-          setTimeout(onComplete, 500);
+          setTimeout(() => onCompleteRef.current(), 500);
           return 100;
         }
         return prev + Math.random() * 15;
@@ -16,7 +22,7 @@ const AiLoader = ({ onComplete }) => {
     }, 100);
 
     return () => clearInterval(interval);
-  }, [onComplete]);
+  }, []); // stable — no dependency on onComplete
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-zinc-950">

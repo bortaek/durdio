@@ -61,11 +61,7 @@ html {
   animation: bg-pulse-2 15s ease-in-out infinite;
 }
 
-/* Off-screen section rendering optimisation */
-section {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 600px;
-}
+/* Removed content-visibility to prevent layout thrashing with framer-motion whileInView */
 
 /* Loader Animations — GPU-composited only (transform, filter) */
 @keyframes loader-rotate {

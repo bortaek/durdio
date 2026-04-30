@@ -43,7 +43,7 @@ const AiLoader = ({ onComplete }) => {
 
         <div className="loader w-50 h-50 rounded-full"></div>
         
-        <p className="text-zinc-500 text-sm">{Math.min(Math.round(progress), 100)}%</p>
+        <p className="text-zinc-400 text-sm">{Math.min(Math.round(progress), 100)}%</p>
       </div>
 
     </div>

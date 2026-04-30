@@ -35,7 +35,7 @@ const About = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="space-y-8"
           >
-            <div className="text-zinc-400 text-lg leading-relaxed space-y-6">
+            <div className="text-zinc-300 text-lg leading-relaxed space-y-6">
               <p>{aboutData.description1}</p>
               <p>{aboutData.description2}</p>
             </div>
@@ -49,7 +49,7 @@ const About = () => {
                   <div key={i} className="relative">
                     <div className="absolute -left-[31px] top-1.5 w-3 h-3 bg-indigo-500 rounded-full ring-4 ring-zinc-950"></div>
                     <h4 className="text-lg font-bold text-zinc-200">{exp.role}</h4>
-                    <div className="text-sm text-zinc-500 mb-2">{exp.company} | {exp.period}</div>
+                    <div className="text-sm text-zinc-400 mb-2">{exp.company} | {exp.period}</div>
                     <p className="text-zinc-400 text-sm">{exp.desc}</p>
                   </div>
                 ))}
@@ -72,19 +72,19 @@ const About = () => {
                   {icons[index % icons.length]}
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-zinc-100 mb-2">{skill.title}</h3>
-                  <p className="text-zinc-400 text-sm">{skill.description}</p>
+                  <h4 className="text-xl font-semibold text-zinc-100 mb-2">{skill.title}</h4>
+                  <p className="text-zinc-300 text-sm">{skill.description}</p>
                 </div>
               </motion.div>
             ))}
 
             <div className="mt-6 glass-panel p-6 border-indigo-500/20">
-               <h3 className="text-xl font-semibold text-zinc-100 mb-4">{aboutData.educationTitle}</h3>
+               <h4 className="text-xl font-semibold text-zinc-100 mb-4">{aboutData.educationTitle}</h4>
                {aboutData.education.map((edu, i) => (
                  <div key={i}>
                    <h4 className="text-lg font-medium text-indigo-300">{edu.degree}</h4>
-                   <p className="text-zinc-400">{edu.school}</p>
-                   <span className="text-sm text-zinc-500">{edu.year}</span>
+                   <p className="text-zinc-300">{edu.school}</p>
+                   <span className="text-sm text-zinc-400">{edu.year}</span>
                  </div>
                ))}
             </div>

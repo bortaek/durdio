@@ -253,6 +253,7 @@ const Certifications = () => {
               onClick={e => e.stopPropagation()}
             >
               <button 
+                aria-label="Kapat"
                 onClick={() => setSelectedCert(null)}
                 className="absolute -top-4 -right-4 bg-zinc-800 hover:bg-zinc-700 text-white rounded-full p-2 z-10 shadow-lg transition-colors"
               >

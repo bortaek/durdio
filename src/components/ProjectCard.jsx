@@ -20,7 +20,7 @@ const ProjectCard = ({ project, index }) => {
         <h3 className="text-2xl font-bold text-zinc-100 mb-3 group-hover:text-indigo-300 transition-colors">
           {project.title}
         </h3>
-        <p className="text-zinc-400 mb-6 flex-grow">
+        <p className="text-zinc-300 mb-6 flex-grow">
           {project.description}
         </p>
         

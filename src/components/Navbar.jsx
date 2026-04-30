@@ -52,7 +52,7 @@ const Navbar = () => {
             <a
               key={item.name}
               href={item.href}
-              className="text-sm font-medium text-zinc-400 hover:text-zinc-100 transition-colors"
+              className="text-sm font-medium text-zinc-300 hover:text-zinc-100 transition-colors"
             >
               {item.name}
             </a>
@@ -65,7 +65,9 @@ const Navbar = () => {
           </a>
 
           {/* Language Toggle Slider */}
-          <div 
+          <button 
+            type="button"
+            aria-label="Dil değiştir / Switch language"
             onClick={toggleLanguage}
             className="relative flex items-center w-14 h-7 bg-zinc-800 rounded-full p-1 cursor-pointer select-none border border-zinc-700 shadow-inner"
           >
@@ -79,12 +81,14 @@ const Navbar = () => {
               }}
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
             />
-          </div>
+          </button>
         </nav>
 
         {/* Mobile Toggle */}
         <div className="flex items-center gap-4 md:hidden">
-          <div 
+          <button 
+            type="button"
+            aria-label="Dil değiştir / Switch language"
             onClick={toggleLanguage}
             className="relative flex items-center w-14 h-7 bg-zinc-800 rounded-full p-1 cursor-pointer select-none border border-zinc-700 shadow-inner"
           >
@@ -98,8 +102,9 @@ const Navbar = () => {
               }}
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
             />
-          </div>
+          </button>
           <button
+            aria-label={mobileMenuOpen ? 'Menüyü kapat' : 'Menüyü aç'}
             className="text-zinc-300"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >

@@ -67,26 +67,11 @@ section {
   contain-intrinsic-size: auto 600px;
 }
 
-/* Loader Animations */
+/* Loader Animations — GPU-composited only (transform, filter) */
 @keyframes loader-rotate {
-  0% {
-    transform: rotate(90deg);
-    box-shadow: 0 10px 20px 0 #fff inset,
-      0 20px 30px 0 #ad5fff inset,
-      0 60px 60px 0 #471eec inset;
-  }
-  50% {
-    transform: rotate(270deg);
-    box-shadow: 0 10px 20px 0 #fff inset,
-      0 20px 10px 0 #d60a47 inset,
-      0 40px 60px 0 #311e80 inset;
-  }
-  100% {
-    transform: rotate(450deg);
-    box-shadow: 0 10px 20px 0 #fff inset,
-      0 20px 30px 0 #ad5fff inset,
-      0 60px 60px 0 #471eec inset;
-  }
+  0%   { transform: rotate(90deg);  filter: hue-rotate(0deg); }
+  50%  { transform: rotate(270deg); filter: hue-rotate(60deg); }
+  100% { transform: rotate(450deg); filter: hue-rotate(0deg); }
 }
 
 @keyframes loader-letter-anim {
@@ -106,12 +91,15 @@ section {
 }
 
 .loader {
+  background: conic-gradient(from 0deg, #471eec, #ad5fff, #fff, #471eec);
   animation: loader-rotate 2s linear infinite;
+  will-change: transform, filter;
 }
 
 .loader-letter {
   display: inline-block;
   animation: loader-letter-anim 1.5s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 .loader-letter:nth-child(1) { animation-delay: 0s; }

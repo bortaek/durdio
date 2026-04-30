@@ -177,9 +177,7 @@ const Certifications = () => {
   const getTitle = (cert) => language === 'tr' ? cert.titleTr : cert.titleEn;
 
   const handleCertClick = (cert) => {
-    if (cert.pdf) {
-      window.open(encodeURI(cert.pdf), '_blank', 'noopener,noreferrer');
-    } else if (cert.image) {
+    if (cert.pdf || cert.image) {
       setSelectedCert(cert);
     }
   };
@@ -237,7 +235,7 @@ const Certifications = () => {
         </div>
       </div>
 
-      {/* Lightbox for images */}
+      {/* Lightbox for images & PDFs */}
       <AnimatePresence>
         {selectedCert && (
           <motion.div
@@ -248,24 +246,35 @@ const Certifications = () => {
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-6"
           >
             <motion.div
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.8 }}
-              className="relative max-w-4xl w-full"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className={`relative w-full ${selectedCert.pdf ? 'max-w-5xl h-[85vh]' : 'max-w-4xl'} flex flex-col`}
               onClick={e => e.stopPropagation()}
             >
               <button 
                 onClick={() => setSelectedCert(null)}
-                className="absolute -top-4 -right-4 bg-zinc-800 hover:bg-zinc-700 text-white rounded-full p-2 z-10 shadow-lg"
+                className="absolute -top-4 -right-4 bg-zinc-800 hover:bg-zinc-700 text-white rounded-full p-2 z-10 shadow-lg transition-colors"
               >
                 <X size={20} />
               </button>
-              <img 
-                src={selectedCert.image} 
-                alt={getTitle(selectedCert)}
-                className="w-full rounded-xl shadow-2xl"
-              />
-              <p className="text-center text-zinc-200 font-medium mt-4 text-lg">
+
+              {selectedCert.pdf ? (
+                <iframe
+                  src={encodeURI(selectedCert.pdf)}
+                  title={getTitle(selectedCert)}
+                  className="w-full flex-1 rounded-xl shadow-2xl bg-white"
+                  style={{ minHeight: 0 }}
+                />
+              ) : (
+                <img 
+                  src={selectedCert.image} 
+                  alt={getTitle(selectedCert)}
+                  className="w-full rounded-xl shadow-2xl"
+                />
+              )}
+
+              <p className="text-center text-zinc-200 font-medium mt-4 text-lg flex-shrink-0">
                 {getTitle(selectedCert)}
               </p>
             </motion.div>
